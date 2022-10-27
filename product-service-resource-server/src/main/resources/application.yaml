@@ -1,0 +1,16 @@
+spring:
+  security:
+    oauth2:
+      resource-server:
+        jwt:
+          jwk-set-uri: https://keycloak.dev.os2iot.kmd.dk/realms/spring-with-test-scope/protocol/openid-connect/certs
+
+server:
+  port: 9191
+
+# Enable this for debugging
+#logging:
+#  level:
+#    org:
+#      springframework:
+#        security: DEBUG

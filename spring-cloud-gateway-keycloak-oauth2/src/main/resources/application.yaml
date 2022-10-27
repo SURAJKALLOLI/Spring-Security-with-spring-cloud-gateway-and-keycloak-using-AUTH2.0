@@ -1,0 +1,51 @@
+spring:
+  cloud:
+    gateway:
+      default-filters:
+        - TokenRelay
+      routes:
+        - id: product-resource-server
+          uri: http://localhost:9191
+          predicates:
+            - Path=/product/**
+  security:
+    oauth2:
+      client:
+        provider:
+          my-keycloak-provider:
+            issuer-uri: https://keycloak.dev.os2iot.kmd.dk/realms/spring-with-test-scope
+            # Individual properties can also be provided this way
+#            token-uri: http://localhost:8080/auth/realms/amrutrealm/protocol/openid-connect/token
+#            authorization-uri: http://localhost:8080/auth/realms/amrutrealm/protocol/openid-connect/auth
+#            userinfo-uri: http://localhost:8080/auth/realms/amrutrealm/protocol/openid-connect/userinfo
+#            user-name-attribute: preferred_username
+        registration:
+          keycloak-spring-gateway-client:
+            provider: my-keycloak-provider
+            scope: openid
+            client-id: spring-cloud-gateway
+            client-secret: 9D1Xxu9ImAyBxnynd7TQVytufNuGKep8
+            authorization-grant-type: authorization_code
+            redirect-uri: "{baseUrl}/login/oauth2/code/keycloak"
+          keycloak-without-test-scope:
+            provider: my-keycloak-provider
+            client-id: spring-without-test-scope
+            client-secret: f6fc369d-49ce-4132-8282-5b5d413eba23
+            authorization-grant-type: authorization_code
+            redirect-uri: "{baseUrl}/login/oauth2/code/keycloak"
+
+# Enable these to debug the Authorization flow
+logging:
+    level:
+      org:
+        springframework:
+          security:
+            web: DEBUG
+server:
+  port: 9090
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
